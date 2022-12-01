@@ -1,10 +1,18 @@
-import { Controller, Get, Post, Body, UploadedFile, UseInterceptors, StreamableFile } from "@nestjs/common";
+import { Controller, Get, Post, UploadedFile, UseInterceptors, StreamableFile } from "@nestjs/common";
 import { AppService } from "./app.service";
 import { FileInterceptor } from "@nestjs/platform-express";
-import * as sharp from 'sharp';
 import { createReadStream } from "fs";
 import { join } from "path";
 import * as process from "process";
+import * as OSS from "ali-oss";
+import { AccessKeyId, AccessKeySecret } from "./core/configs/ali-oss";
+
+const client = new OSS({
+  accessKeyId: AccessKeyId,
+  accessKeySecret: AccessKeySecret,
+  bucket: 'lizen',
+  endpoint: 'oss-cn-hangzhou.aliyuncs.com'
+});
 
 @Controller()
 export class AppController {
@@ -16,21 +24,17 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  upload(@UploadedFile() file): any {
-    const image = sharp(file.buffer);
-    image.metadata().then(data => {
-      if (data.width > 300) {
-
-      }
-    })
-    return 'ok'
+  @Post("upload")
+  @UseInterceptors(FileInterceptor("file"))
+  upload(@UploadedFile() file): Promise<any> {
+    const stream = new StreamableFile(file.buffer);
+    const url = `avatar/rjjsbx.jpg`;
+    return client.putStream(url, stream.getStream());
   }
 
-  @Get('getFile')
+  @Get("getFile")
   getFile(): StreamableFile {
-    const file = createReadStream(join(process.cwd(), 'src/statics/rjjsbx.jpg'));
+    const file = createReadStream(join(process.cwd(), "src/statics/rjjsbx.jpg"));
     return new StreamableFile(file);
   }
 
