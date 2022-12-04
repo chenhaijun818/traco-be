@@ -3,8 +3,9 @@ import { AppService } from "./app.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { createReadStream } from "fs";
 import { join } from "path";
-import * as process from "process";
-import * as OSS from "ali-oss";
+import process from "process";
+import OSS from "ali-oss";
+import { nanoid } from 'nanoid';
 import { AccessKeyId, AccessKeySecret } from "./core/configs/ali-oss";
 
 const client = new OSS({
@@ -28,7 +29,7 @@ export class AppController {
   @UseInterceptors(FileInterceptor("file"))
   upload(@UploadedFile() file): Promise<any> {
     const stream = new StreamableFile(file.buffer);
-    const url = `avatar/rjjsbx.jpg`;
+    const url = `avatar/${nanoid(8)}.jpg`;
     return client.putStream(url, stream.getStream());
   }
 

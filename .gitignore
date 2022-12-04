@@ -1,6 +1,7 @@
 
 src/core/configs/ali-oss.ts
 /src/statics
+.env
 
 # compiled output
 /dist
