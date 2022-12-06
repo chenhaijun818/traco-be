@@ -48,10 +48,10 @@ export class UserController {
     let user = await this.userModel.findOne({ phone }).exec();
     // 用户不存在，则直接创建
     if (!user) {
-      user = await this.userModel.create({ phone, name: `TL${phone.slice(-4)}` });
+      user = await this.userModel.create({ phone, name: `TL${phone.slice(-4)}`, avatar: 'https://traco-oss.oss-cn-hangzhou.aliyuncs.com/avatars/default-avatar.jpg' });
     }
 
-    const token = sign({ phone: user.phone, name: user.name }, "123456", { expiresIn: "7d" });
+    const token = sign({ id: user._id, phone: user.phone, name: user.name }, "123456", { expiresIn: "7d" });
     return {
       code: 200,
       data: { token, user },

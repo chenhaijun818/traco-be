@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UploadedFile, UseInterceptors, StreamableFile, Headers, Req } from "@nestjs/common";
+import { Controller, Get, Post, UploadedFile, UseInterceptors, StreamableFile, Req } from "@nestjs/common";
 import { AppService } from "./app.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { createReadStream } from "fs";
@@ -6,13 +6,12 @@ import { join } from "path";
 import process from "process";
 import OSS from "ali-oss";
 import { nanoid } from "nanoid";
-import { verify } from "jsonwebtoken";
 import { AccessKeyId, AccessKeySecret } from "./core/configs/ali-oss";
 
 const client = new OSS({
   accessKeyId: AccessKeyId,
   accessKeySecret: AccessKeySecret,
-  bucket: "lizen",
+  bucket: "traco-oss",
   endpoint: "oss-cn-hangzhou.aliyuncs.com"
 });
 
