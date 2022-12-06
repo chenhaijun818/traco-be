@@ -6,17 +6,25 @@ import { ProjectModule } from "./project/project.module";
 import { CoreModule } from "./core/core.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
+import { APP_INTERCEPTOR } from "@nestjs/core";
+import { TokenInterceptor } from "./core/interceptors/token.interceptor";
 
 @Module({
   imports: [
     UserModule,
     ProjectModule,
     CoreModule,
-    ConfigModule.forRoot({isGlobal: true}),
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot("mongodb://127.0.0.1/lizen")
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TokenInterceptor
+    }
+  ]
 })
 export class AppModule {
 }

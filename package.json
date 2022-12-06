@@ -23,6 +23,7 @@
   "dependencies": {
     "@alicloud/dysmsapi20170525": "^2.0.23",
     "@alicloud/openapi-client": "^0.4.4",
+    "@casl/ability": "^6.3.2",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",

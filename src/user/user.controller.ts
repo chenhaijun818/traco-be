@@ -2,7 +2,6 @@ import { Body, Controller, Get, Post, Query, Headers } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { sign, verify } from "jsonwebtoken";
-import ms from "ms";
 import Redis from "ioredis";
 import { UserDocument, User } from "../models/user";
 
@@ -20,11 +19,12 @@ export class UserController {
     if (code) {
       return {
         code: 101001,
+        data: code,
         message: "请求频繁"
       };
     }
     code = (Math.floor(Math.random() * 900000) + 100000).toString();
-    redis.set(`sms${phone}`, code, "EX", 3600);
+    redis.set(`sms${phone}`, code, "EX", 60);
     return {
       code: 200,
       data: code,
@@ -51,7 +51,7 @@ export class UserController {
       user = await this.userModel.create({ phone, name: `TL${phone.slice(-4)}` });
     }
 
-    const token = sign({ phone: user.phone, name: user.name }, "123456", { expiresIn: ms("30s") });
+    const token = sign({ phone: user.phone, name: user.name }, "123456", { expiresIn: "7d" });
     return {
       code: 200,
       data: { token, user },
@@ -60,10 +60,15 @@ export class UserController {
   }
 
   @Get("getUser")
-  getUser(@Headers() headers) {
+  async getUser(@Headers() headers) {
     const [_, token] = headers["authorization"].split(" ");
     const userInfo = verify(token, "123456");
-    return this.userModel.findOne({phone: userInfo.phone}).exec();
+    const res = await this.userModel.findOne({ phone: userInfo.phone }).exec();
+    return {
+      code: 200,
+      data: res,
+      message: "success"
+    };
   }
 
   @Post("create")
