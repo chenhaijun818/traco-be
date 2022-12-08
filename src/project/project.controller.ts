@@ -1,4 +1,4 @@
-import { Controller, Post, Headers, Req } from "@nestjs/common";
+import { Controller, Post, Param, Headers, Req, Get } from "@nestjs/common";
 import { nanoid } from "nanoid";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
@@ -19,4 +19,27 @@ export class ProjectController {
       message: "success"
     };
   }
+
+  @Get("myProjects")
+  async getProjects(@Req() req) {
+    const list = await this.project.find({id: req.user.id}).exec();
+    return {
+      code: 200,
+      data: {
+        list
+      },
+      message: 'success'
+    }
+  }
+
+  @Get(":id")
+  async getProject(@Param() param) {
+    const res = await this.project.findOne({id: param.id}).exec();
+    return {
+      code: 200,
+      data: res,
+      message: 'success'
+    }
+  }
+
 }
