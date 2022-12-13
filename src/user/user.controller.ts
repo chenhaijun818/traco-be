@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, Query, Headers } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Headers
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { sign, verify } from "jsonwebtoken";
@@ -27,7 +34,7 @@ export class UserController {
     redis.set(`sms${phone}`, code, "EX", 60);
     return {
       code: 200,
-      data: code,
+      data: { code },
       message: "success"
     };
   }
@@ -48,7 +55,11 @@ export class UserController {
     let user = await this.userModel.findOne({ phone }).exec();
     // 用户不存在，则直接创建
     if (!user) {
-      user = await this.userModel.create({ phone, name: `TL${phone.slice(-4)}`, avatar: 'https://traco-oss.oss-cn-hangzhou.aliyuncs.com/avatars/default-avatar.jpg' });
+      user = await this.userModel.create({
+        phone,
+        name: `TL${phone.slice(-4)}`,
+        avatar: "https://traco-oss.oss-cn-hangzhou.aliyuncs.com/avatars/default-avatar.jpg"
+      });
     }
 
     const token = sign({ id: user._id, phone: user.phone, name: user.name }, "123456", { expiresIn: "7d" });
@@ -63,7 +74,7 @@ export class UserController {
   async getUser(@Headers() headers) {
     const [_, token] = headers["authorization"].split(" ");
     const userInfo = verify(token, "123456");
-    const res = await this.userModel.findOne({ phone: userInfo.phone }).exec();
+    const res = await this.userModel.findById(userInfo.id).exec();
     return {
       code: 200,
       data: res,
@@ -71,12 +82,4 @@ export class UserController {
     };
   }
 
-  @Post("create")
-  async createUser(@Body() body) {
-    let res = await this.userModel.create({
-      phone: body.phone,
-      name: body.name
-    });
-    console.log(res);
-  }
 }

@@ -1,12 +1,8 @@
-import { Controller, Get, Post, UploadedFile, UseInterceptors, StreamableFile, Req } from "@nestjs/common";
-import { AppService } from "./app.service";
+import { Controller, Get, Post, UploadedFile, UseInterceptors, StreamableFile, Req, Body } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { createReadStream } from "fs";
-import { join } from "path";
-import process from "process";
-import OSS from "ali-oss";
 import { nanoid } from "nanoid";
 import { AccessKeyId, AccessKeySecret } from "./core/configs/ali-oss";
+import OSS from "ali-oss";
 
 const client = new OSS({
   accessKeyId: AccessKeyId,
@@ -17,26 +13,20 @@ const client = new OSS({
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {
-  }
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  constructor() {
   }
 
   @Post("upload")
   @UseInterceptors(FileInterceptor("file"))
-  upload(@UploadedFile() file): Promise<any> {
+  async upload(@UploadedFile() file, @Body() body) {
     const stream = new StreamableFile(file.buffer);
-    const url = `avatar/${nanoid(8)}.jpg`;
-    return client.putStream(url, stream.getStream());
-  }
-
-  @Get("getFile")
-  getFile(): StreamableFile {
-    const file = createReadStream(join(process.cwd(), "src/statics/rjjsbx.jpg"));
-    return new StreamableFile(file);
+    const url = `${body.dir}/${nanoid(12)}.jpg`;
+    const res = await client.putStream(url, stream.getStream());
+    return {
+      code: 200,
+      data: res,
+      message: "success"
+    };
   }
 
   @Get("test")
