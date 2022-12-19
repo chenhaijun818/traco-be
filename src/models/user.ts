@@ -10,9 +10,13 @@ export class User extends Document {
 
   @Prop()
   phone: string;
+  @Prop()
+  email: string;
 
   @Prop()
   avatar: string;
+  @Prop()
+  desc: string;
   @Prop()
   createdTime: Date;
   @Prop()

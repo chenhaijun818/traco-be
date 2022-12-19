@@ -1,4 +1,4 @@
-import { Controller, Post, Param, Req, Get, Body } from "@nestjs/common";
+import { Controller, Post, Param, Req, Get, Body, Query } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { ProjectDocument } from "../models/project";
@@ -56,6 +56,24 @@ export class ProjectController {
       code: 200,
       data: {
         list
+      },
+      message: "success"
+    };
+  }
+
+
+  @Get("tracks")
+  async getTracks(@Query() query) {
+    console.log(query);
+    return {
+      code: 200,
+      data: {
+        list: [
+          { id: "1", name: "主线" },
+          { id: "2", name: "诸葛狗蛋" },
+          { id: "3", name: "西门翠花" },
+          { id: "4", name: "欧阳富贵" }
+        ]
       },
       message: "success"
     };

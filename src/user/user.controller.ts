@@ -4,11 +4,11 @@ import {
   Get,
   Post,
   Query,
-  Headers
+  Req
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { sign, verify } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 import Redis from "ioredis";
 import { UserDocument, User } from "../models/user";
 
@@ -58,11 +58,12 @@ export class UserController {
       user = await this.userModel.create({
         phone,
         name: `TL${phone.slice(-4)}`,
-        avatar: "https://traco-oss.oss-cn-hangzhou.aliyuncs.com/avatars/default-avatar.jpg"
+        avatar: "https://traco-oss.oss-cn-hangzhou.aliyuncs.com/avatars/default-avatar.jpg",
+        desc: "暂无简介"
       });
     }
 
-    const token = sign({ id: user._id, phone: user.phone, name: user.name }, "123456", { expiresIn: "7d" });
+    const token = sign({ id: user._id, phone: user.phone }, "123456", { expiresIn: "7d" });
     return {
       code: 200,
       data: { token, user },
@@ -70,11 +71,19 @@ export class UserController {
     };
   }
 
+  @Post("update")
+  async updateUser(@Req() req, @Body() body) {
+    const res = await this.userModel.findByIdAndUpdate(req.user.id, body).exec();
+    return {
+      code: 200,
+      data: res,
+      message: "success"
+    };
+  }
+
   @Get("getUser")
-  async getUser(@Headers() headers) {
-    const [_, token] = headers["authorization"].split(" ");
-    const userInfo = verify(token, "123456");
-    const res = await this.userModel.findById(userInfo.id).exec();
+  async getUser(@Req() req) {
+    const res = await this.userModel.findById(req.user.id).exec();
     return {
       code: 200,
       data: res,
