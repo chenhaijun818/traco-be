@@ -1,19 +1,19 @@
 import { Controller, Get, Post, UploadedFile, UseInterceptors, StreamableFile, Req, Body } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { nanoid } from "nanoid";
-import { AccessKeyId, AccessKeySecret } from "./core/configs/ali-oss";
 import OSS from "ali-oss";
-
-const client = new OSS({
-  accessKeyId: AccessKeyId,
-  accessKeySecret: AccessKeySecret,
-  bucket: "traco-oss",
-  endpoint: "oss-cn-hangzhou.aliyuncs.com"
-});
+import { ConfigService } from "@nestjs/config";
 
 @Controller()
 export class AppController {
-  constructor() {
+  client = null;
+  constructor(private config: ConfigService) {
+    this.client = new OSS({
+      accessKeyId: config.get('ALI_ACCESS_ID'),
+      accessKeySecret: config.get('ALI_ACCESS_SECRET'),
+      bucket: "traco-oss",
+      endpoint: "oss-cn-hangzhou.aliyuncs.com"
+    });
   }
 
   @Post("upload")
@@ -21,7 +21,7 @@ export class AppController {
   async upload(@UploadedFile() file, @Body() body) {
     const stream = new StreamableFile(file.buffer);
     const url = `${body.dir}/${nanoid(12)}.jpg`;
-    const res = await client.putStream(url, stream.getStream());
+    const res = await this.client.putStream(url, stream.getStream());
     return {
       code: 200,
       data: res,

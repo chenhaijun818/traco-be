@@ -15,7 +15,10 @@ import { TokenInterceptor } from "./core/interceptors/token.interceptor";
     ProjectModule,
     CoreModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot("mongodb://127.0.0.1/traco")
+    MongooseModule.forRoot("mongodb://traco-mongo:27017/traco", {
+      user: 'user',
+      pass: '123456'
+    })
   ],
   controllers: [AppController],
   providers: [

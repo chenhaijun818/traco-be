@@ -1,11 +1,10 @@
 
-src/core/configs/ali-oss.ts
-/src/statics
 .env
 
 # compiled output
 /dist
 /node_modules
+/.docker-volumes
 
 # Logs
 logs

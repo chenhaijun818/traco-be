@@ -1,0 +1,23 @@
+version: "3"
+services:
+  traco-mongo:
+    image: mongo
+    container_name: traco-mongo
+    volumes:
+      - ".docker-volumes/mongo/data:/data/db"
+      - "./mongo-entrypoint:/docker-entrypoint-initdb.d"
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+  traco:
+    depends_on:
+      - traco-mongo
+    build:
+      context: "."
+      dockerfile: "Dockerfile"
+    image: traco
+    container_name: traco
+    ports:
+      - "3000:3000"
