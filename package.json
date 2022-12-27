@@ -30,6 +30,7 @@
     "@nestjs/mongoose": "^9.2.1",
     "@nestjs/platform-express": "^9.0.0",
     "ali-oss": "^6.17.1",
+    "dotenv": "^16.0.3",
     "ioredis": "^5.2.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.5",

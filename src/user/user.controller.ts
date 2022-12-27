@@ -11,18 +11,24 @@ import { Model } from "mongoose";
 import { sign } from "jsonwebtoken";
 import Redis from "ioredis";
 import { UserDocument, User } from "../models/user";
+import { ConfigService } from "@nestjs/config";
 
-const redis = new Redis();
 
 @Controller("user")
 export class UserController {
-  constructor(@InjectModel("User") private userModel: Model<UserDocument>) {
+  redis = null;
+  constructor(@InjectModel("User") private userModel: Model<UserDocument>, private config: ConfigService) {
+    this.redis = new Redis({
+      host: 'redis',
+      port: 6379,
+      password: config.get('REDIS_PASSWORD')
+    });
   }
 
   @Get("getCode")
   async getCode(@Query() query) {
     const { phone } = query;
-    let code: string = await redis.get(`sms${phone}`);
+    let code: string = await this.redis.get(`sms${phone}`);
     if (code) {
       return {
         code: 101001,
@@ -31,7 +37,7 @@ export class UserController {
       };
     }
     code = (Math.floor(Math.random() * 900000) + 100000).toString();
-    redis.set(`sms${phone}`, code, "EX", 60);
+    this.redis.set(`sms${phone}`, code, "EX", 60);
     return {
       code: 200,
       data: { code },
@@ -42,7 +48,7 @@ export class UserController {
   @Post("login")
   async login(@Body() body) {
     const { phone, code } = body;
-    const correctCode = await redis.get(`sms${phone}`);
+    const correctCode = await this.redis.get(`sms${phone}`);
 
     // 验证码错误
     if (code !== correctCode) {

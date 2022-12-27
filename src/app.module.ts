@@ -8,6 +8,8 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { TokenInterceptor } from "./core/interceptors/token.interceptor";
+import {config} from 'dotenv';
+config({path: '.env'})
 
 @Module({
   imports: [
@@ -15,9 +17,9 @@ import { TokenInterceptor } from "./core/interceptors/token.interceptor";
     ProjectModule,
     CoreModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot("mongodb://traco-mongo:27017/traco", {
-      user: 'user',
-      pass: '123456'
+    MongooseModule.forRoot("mongodb://mongo:27017/traco", {
+      user: process.env.MONGO_DB_USERNAME,
+      pass: process.env.MONGO_DB_PASSWORD
     })
   ],
   controllers: [AppController],
