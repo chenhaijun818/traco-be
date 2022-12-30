@@ -1,0 +1,8 @@
+{
+  "git": {
+    "requireUpstream": false
+  },
+  "nmp": {
+    "publish": false
+  }
+}

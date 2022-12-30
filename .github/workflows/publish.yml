@@ -1,0 +1,67 @@
+name: auto publish
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: create env file
+        run: |
+          touch .env
+          echo ALC_ACCESS_ID=${{secrets.ALC_ACCESS_ID}} >> .env
+          echo ALC_ACCESS_SECRET=${{secrets.ALC_ACCESS_SECRET}} >> .env
+          echo MONGO_ROOT_USERNAME=${{secrets.MONGO_ROOT_USERNAME}} >> .env
+          echo MONGO_ROOT_PASSWORD=${{secrets.MONGO_ROOT_PASSWORD}} >> .env
+          echo MONGO_USERNAME=${{secrets.MONGO_USERNAME}} >> .env
+          echo MONGO_PASSWORD=${{secrets.MONGO_PASSWORD}} >> .env
+          echo REDIS_PASSWORD=${{secrets.REDIS_PASSWORD}} >> .env
+          echo JWT_SECRET=${{secrets.JWT_SECRET}} >> .env
+      - name: login to acr
+        uses: aliyun/acr-login@v1
+        with:
+          login-server: https://registry.cn-hangzhou.aliyuncs.com
+          region-id: ch-hangzhou
+          username: ${{secrets.ACR_USERNAME}}
+          password: ${{secrets.ACR_PASSWORD}}
+      - name: build image for acr
+        run: docker build --tag "registry.cn-hangzhou.aliyuncs.com/traco/traco-be:${{github.ref_name}}" .
+      - name: push image to acr
+        run: docker push registry.cn-hangzhou.aliyuncs.com/traco/traco-be:${{github.ref_name}}
+      - name: find and replace tag
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: "{{tag}}"
+          replace: ${{github.ref_name}}
+          include: "docker-compose-online.yml"
+      - run: cat docker-compose-online.yml
+      - name: copy files 1
+        run: |
+          mkdir traco-be
+          cp .env docker-compose-online.yml traco-be
+          cp -r mongo-entrypoint traco-be
+          ls -a traco-be
+      - name: copy files 2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{secrets.HOST}}
+          username: ${{secrets.SSH_USER}}
+          password: ${{secrets.SSH_PWD}}
+          source: 'traco-be'
+          target: '~'
+      - name: ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.HOST}}
+          username: ${{secrets.SSH_USER}}
+          password: ${{secrets.SSH_PWD}}
+          script_stop: true
+          script: |
+            docker login --username=${{secrets.ACR_USERNAME}} --password=${{secrets.ACR_PASSWORD}} registry.cn-hangzhou.aliyuncs.com
+            cd ~/traco-be
+            docker-compose -f docker-compose-online.yml down
+            docker-compose -f docker-compose-online.yml up -d
+            rm -rf .env
+            docker logout registry.cn-hangzhou.aliyuncs.com

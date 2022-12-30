@@ -1,0 +1,28 @@
+version: "3"
+services:
+  traco-mongo:
+    image: mongo
+    container_name: traco-mongo
+    volumes:
+      - ".docker-volumes/mongo/data:/data/db"
+      - "./mongo-entrypoint:/docker-entrypoint-initdb.d"
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env
+  traco-redis:
+    image: redis
+    container_name: traco-redis
+    command: >
+      --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "6379:6379"
+    env_file:
+      - .env
+  traco-be:
+    image: registry.cn-hangzhou.aliyuncs.com/traco/traco-be:{{tag}}
+    container_name: traco-be
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
