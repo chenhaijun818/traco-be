@@ -2,7 +2,7 @@ name: auto publish
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - '*.*.*'
 jobs:
   publish-release:
     runs-on: ubuntu-latest
