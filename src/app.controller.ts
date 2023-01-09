@@ -9,8 +9,8 @@ export class AppController {
   client = null;
   constructor(private config: ConfigService) {
     this.client = new OSS({
-      accessKeyId: config.get('ALI_ACCESS_ID'),
-      accessKeySecret: config.get('ALI_ACCESS_SECRET'),
+      accessKeyId: config.get('ALC_ACCESS_ID'),
+      accessKeySecret: config.get('ALC_ACCESS_SECRET'),
       bucket: "traco-oss",
       endpoint: "oss-cn-hangzhou.aliyuncs.com"
     });

@@ -10,14 +10,13 @@ import { APP_INTERCEPTOR } from "@nestjs/core";
 import { TokenInterceptor } from "./core/interceptors/token.interceptor";
 import {config} from 'dotenv';
 config({path: '.env'})
-
 @Module({
   imports: [
     UserModule,
     ProjectModule,
     CoreModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot("mongodb://mongo:27017/traco", {
+    MongooseModule.forRoot(`mongodb://${process.env.MONGO_HOST}:27017/traco`, {
       user: process.env.MONGO_DB_USERNAME,
       pass: process.env.MONGO_DB_PASSWORD
     })

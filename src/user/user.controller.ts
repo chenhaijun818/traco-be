@@ -17,11 +17,12 @@ import { ConfigService } from "@nestjs/config";
 @Controller("user")
 export class UserController {
   redis = null;
+
   constructor(@InjectModel("User") private userModel: Model<UserDocument>, private config: ConfigService) {
     this.redis = new Redis({
-      host: 'redis',
+      host: config.get("REDIS_HOST"),
       port: 6379,
-      password: config.get('REDIS_PASSWORD')
+      password: config.get("REDIS_PASSWORD")
     });
   }
 
