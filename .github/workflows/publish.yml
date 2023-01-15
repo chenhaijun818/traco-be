@@ -15,8 +15,10 @@ jobs:
           echo ALC_ACCESS_SECRET=${{secrets.ALC_ACCESS_SECRET}} >> .env
           echo MONGO_ROOT_USERNAME=${{secrets.MONGO_ROOT_USERNAME}} >> .env
           echo MONGO_ROOT_PASSWORD=${{secrets.MONGO_ROOT_PASSWORD}} >> .env
+          echo MONGO_HOST=traco-mongo >> .env
           echo MONGO_USERNAME=${{secrets.MONGO_USERNAME}} >> .env
           echo MONGO_PASSWORD=${{secrets.MONGO_PASSWORD}} >> .env
+          echo REDIS_HOST=traco-redis >> .env
           echo REDIS_PASSWORD=${{secrets.REDIS_PASSWORD}} >> .env
           echo JWT_SECRET=${{secrets.JWT_SECRET}} >> .env
       - name: login to acr
