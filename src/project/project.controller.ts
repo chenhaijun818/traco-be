@@ -106,6 +106,19 @@ export class ProjectController {
     };
   }
 
+  @Post('affair/delete')
+  async deleteAffair(@Body() body) {
+    const a = await this.affair.findById(body.id).exec();
+    if (a) {
+      a.delete();
+    }
+    return {
+      code: 200,
+      data: a,
+      message: "success"
+    };
+  }
+
   @Get(":id")
   async getProject(@Param() param) {
     const res = await this.project.findById(param.id).exec();
