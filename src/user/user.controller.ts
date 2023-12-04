@@ -10,7 +10,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { sign } from "jsonwebtoken";
 import Redis from "ioredis";
-import { UserDocument, User } from "../models/user";
+import { UserDocument, User } from "./models/user";
 import { ConfigService } from "@nestjs/config";
 
 

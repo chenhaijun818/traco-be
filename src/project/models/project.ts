@@ -24,8 +24,10 @@ export class Project extends Document {
 
   @Prop()
   createdTime: Date;
+
   @Prop()
   updateTime: Date;
+
   @Prop()
   status: number;
 }

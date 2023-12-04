@@ -1,11 +1,13 @@
 import { Controller, Post, Param, Req, Get, Body, Query } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { ProjectDocument } from "../models/project";
+import { ProjectDocument } from "./models/project";
+import { AffairDocument } from "./models/affair";
 
 @Controller("project")
 export class ProjectController {
-  constructor(@InjectModel("Project") private project: Model<ProjectDocument>) {
+  constructor(@InjectModel("Project") private project: Model<ProjectDocument>,
+              @InjectModel("Affair") private affair: Model<AffairDocument>) {
   }
 
   @Post("create")
@@ -54,9 +56,7 @@ export class ProjectController {
     const list = await this.project.find({ id: req.user.id }).exec();
     return {
       code: 200,
-      data: {
-        list
-      },
+      data: { list },
       message: "success"
     };
   }
@@ -75,6 +75,33 @@ export class ProjectController {
           { id: "4", name: "欧阳富贵" }
         ]
       },
+      message: "success"
+    };
+  }
+
+  // 获取作品的所有事件
+  @Get("affairs")
+  async getAffairs(@Query() query) {
+    const list = await this.affair.find({ pid: query.pid }).exec();
+    return {
+      code: 200,
+      data: { list },
+      message: "success"
+    };
+  }
+
+  // 新增一个事件
+  @Post("affair/add")
+  async addAffair(@Body() body) {
+    const res = await this.affair.create({
+      name: body.name,
+      content: body.content,
+      pid: body.pid,
+      tid: body.tid
+    });
+    return {
+      code: 200,
+      data: res,
       message: "success"
     };
   }
