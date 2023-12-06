@@ -2,12 +2,10 @@ import { Controller, Post, Param, Req, Get, Body, Query } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { ProjectDocument } from "./models/project";
-import { AffairDocument } from "./models/affair";
 
 @Controller("project")
 export class ProjectController {
-  constructor(@InjectModel("Project") private project: Model<ProjectDocument>,
-              @InjectModel("Affair") private affair: Model<AffairDocument>) {
+  constructor(@InjectModel("Project") private project: Model<ProjectDocument>) {
   }
 
   @Post("create")
@@ -31,7 +29,6 @@ export class ProjectController {
     const p = await this.project.findById(body.id).exec();
     if (p.user === req.user.id) {
       p.delete();
-      p.save();
     }
     return {
       code: 200,
@@ -61,7 +58,6 @@ export class ProjectController {
     };
   }
 
-
   @Get("tracks")
   async getTracks(@Query() query) {
     console.log(query);
@@ -75,46 +71,6 @@ export class ProjectController {
           { id: "4", name: "欧阳富贵" }
         ]
       },
-      message: "success"
-    };
-  }
-
-  // 获取作品的所有事件
-  @Get("affairs")
-  async getAffairs(@Query() query) {
-    const list = await this.affair.find({ pid: query.pid }).exec();
-    return {
-      code: 200,
-      data: { list },
-      message: "success"
-    };
-  }
-
-  // 新增一个事件
-  @Post("affair/add")
-  async addAffair(@Body() body) {
-    const res = await this.affair.create({
-      name: body.name,
-      content: body.content,
-      pid: body.pid,
-      tid: body.tid
-    });
-    return {
-      code: 200,
-      data: res,
-      message: "success"
-    };
-  }
-
-  @Post('affair/delete')
-  async deleteAffair(@Body() body) {
-    const a = await this.affair.findById(body.id).exec();
-    if (a) {
-      a.delete();
-    }
-    return {
-      code: 200,
-      data: a,
       message: "success"
     };
   }
