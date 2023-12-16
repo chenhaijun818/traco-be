@@ -30,6 +30,14 @@ export class Project extends Document {
 
   @Prop()
   status: number;
+
+  // 基准时间，在子模块用做时间基准
+  @Prop()
+  baseTime: number;
+
+  // 该作品下的支线计数，累加不减
+  @Prop()
+  trackCount: number;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

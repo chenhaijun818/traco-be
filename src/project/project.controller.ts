@@ -15,7 +15,8 @@ export class ProjectController {
       name: "未命名作品",
       user: req.user.id,
       cover,
-      desc: "暂无简介"
+      desc: "暂无简介",
+      trackCount: 1
     });
     return {
       code: 200,

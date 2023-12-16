@@ -13,6 +13,14 @@ export class Track extends Document {
     // 绑定的角色id
     @Prop()
     rid: string;
+
+    // 序号
+    @Prop()
+    order: number;
+
+    // 该支线下的事件计数，累加不减
+    @Prop()
+    affairCount: number;
 }
 
 export const TrackSchema = SchemaFactory.createForClass(Track);

@@ -39,6 +39,10 @@ export class Affair extends Document {
   // 主要人物
   @Prop()
   roles: string;
+
+  // 序号
+  @Prop()
+  order: number;
 }
 
 export const AffairSchema = SchemaFactory.createForClass(Affair);
