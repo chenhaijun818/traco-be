@@ -5,6 +5,7 @@ import { Project, ProjectSchema } from "./models/project";
 import { Affair, AffairSchema } from "./models/affair";
 import { AffairModule } from './affair/affair.module';
 import { TrackModule } from './track/track.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { TrackModule } from './track/track.module';
       { name: Affair.name, schema: AffairSchema }
     ]),
     AffairModule,
-    TrackModule
+    TrackModule,
+    RoleModule
   ],
   controllers: [ProjectController]
 })
