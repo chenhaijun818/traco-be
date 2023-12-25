@@ -15,7 +15,6 @@ export class RoleController {
         const res = await this.role.create({
             name, pid, avatar
         });
-        console.log(res);
         return {code: 200, data: res, message: 'success'}
     }
 
@@ -30,7 +29,6 @@ export class RoleController {
 
     @Post('update')
     async update(@Body() body) {
-        console.log(body)
         const { id, ...update } = body;
         const res = await this.role.findByIdAndUpdate(id, update).exec();
         return {code: 200, data: res, message: 'success'}
@@ -38,9 +36,7 @@ export class RoleController {
 
     @Get('roles')
     async getRoles(@Query() query) {
-        console.log(query)
         const res = await this.role.find({pid: query.pid}).exec();
-        console.log(res);
         return {code: 200, data: res, message: 'success'}
     }
 }
