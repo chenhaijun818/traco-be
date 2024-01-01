@@ -8,12 +8,13 @@ import {ProjectDocument} from "../models/project";
 export class TrackController {
     constructor(@InjectModel("Track") private track: Model<TrackDocument>,
                 @InjectModel("Project") private project: Model<ProjectDocument>
-                ) {
+    ) {
     }
 
     @Post('add')
     async add(@Body() body) {
         const project = await this.project.findById(body.pid);
+        console.log(project)
         const res = await this.track.create({
             name: body.name,
             pid: body.pid,
@@ -26,7 +27,6 @@ export class TrackController {
 
     @Post('delete')
     async delete(@Body() body) {
-        console.log(body)
         const t = await this.track.findById(body.id).exec();
         if (t) {
             t.delete();
@@ -34,8 +34,15 @@ export class TrackController {
         return {code: 200, data: t, message: 'success'}
     }
 
+    @Post('update')
+    async update(@Body() body) {
+        const {id, ...update} = body;
+        const res = await this.track.findByIdAndUpdate(id, update).exec();
+        return {code: 200, data: res, message: "success"};
+    }
+
     @Get('tracks')
-    async getTracks(@Query() query){
+    async getTracks(@Query() query) {
         console.log(query)
         const res = await this.track.find({pid: query.pid}).exec();
         return {code: 200, data: res, message: 'success'}
