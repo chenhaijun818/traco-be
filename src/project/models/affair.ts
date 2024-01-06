@@ -1,5 +1,5 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
+import {Document} from "mongoose";
 
 export type AffairDocument = Affair & Document;
 
@@ -36,9 +36,13 @@ export class Affair extends Document {
   @Prop()
   site: string;
 
-  // 主要人物
+  // 主要角色id
   @Prop()
-  roles: string;
+  roles: string[];
+
+  // 参与角色id
+  @Prop()
+  otherRoles: string[];
 
   // 序号
   @Prop()
