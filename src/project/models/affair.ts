@@ -1,5 +1,5 @@
-import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
-import {Document} from "mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
 export type AffairDocument = Affair & Document;
 
@@ -46,7 +46,10 @@ export class Affair extends Document {
 
   // 序号
   @Prop()
-  order: number;
+  sort: number;
+  // 是否已完成
+  @Prop()
+  done: boolean;
 }
 
 export const AffairSchema = SchemaFactory.createForClass(Affair);
