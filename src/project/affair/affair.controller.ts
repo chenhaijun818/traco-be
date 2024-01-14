@@ -16,6 +16,7 @@ export class AffairController {
             content: body.content,
             pid: body.pid,
             tid: body.tid,
+            sort: body.sort,
             startTime: body.startTime
         });
         return {
