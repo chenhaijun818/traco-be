@@ -51,12 +51,12 @@ export class AffairController {
     }
 
     // 获取作品的所有事件
-    @Get("list")
+    @Get("affairs")
     async getAffairs(@Query() query) {
         const list = await this.affair.find({pid: query.pid}).exec();
         return {
             code: 200,
-            data: {list},
+            data: list,
             message: "success"
         };
     }
