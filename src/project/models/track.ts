@@ -8,6 +8,8 @@ export class Track extends Document {
     @Prop()
     id: string;
     @Prop()
+    pid: string;
+    @Prop()
     name: string;
     // 绑定的角色id
     @Prop()
