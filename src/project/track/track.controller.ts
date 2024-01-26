@@ -13,6 +13,7 @@ export class TrackController {
         const res = await this.track.create({
             name: body.name,
             pid: body.pid,
+            rid: body.rid,
             visible: true
         });
         return {code: 200, data: res, message: 'success'}
