@@ -24,7 +24,6 @@ export class SiteController {
     @Post('update')
     async update(@Body() body){
         const { id, ...update } = body;
-        console.log(body)
         const res = await this.site.findByIdAndUpdate(id, update).exec();
         return {code: 200, data: res, message: 'success'}
     }

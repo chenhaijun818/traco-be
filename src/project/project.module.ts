@@ -1,12 +1,13 @@
-import { Module } from "@nestjs/common";
-import { ProjectController } from "./project.controller";
-import { MongooseModule } from "@nestjs/mongoose";
-import { Project, ProjectSchema } from "./models/project";
-import { Affair, AffairSchema } from "./models/affair";
-import { AffairModule } from './affair/affair.module';
-import { TrackModule } from './track/track.module';
-import { RoleModule } from './role/role.module';
-import { SiteModule } from './site/site.module';
+import {Module} from "@nestjs/common";
+import {ProjectController} from "./project.controller";
+import {MongooseModule} from "@nestjs/mongoose";
+import {Project, ProjectSchema} from "./models/project";
+import {Affair, AffairSchema} from "./models/affair";
+import {AffairModule} from './affair/affair.module';
+import {TrackModule} from './track/track.module';
+import {RoleModule} from './role/role.module';
+import {SiteModule} from './site/site.module';
+import {ThingModule} from './thing/thing.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { SiteModule } from './site/site.module';
     AffairModule,
     TrackModule,
     RoleModule,
-    SiteModule
+    SiteModule,
+    ThingModule
   ],
   controllers: [ProjectController]
 })
