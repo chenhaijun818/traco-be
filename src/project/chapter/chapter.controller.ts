@@ -36,4 +36,10 @@ export class ChapterController {
         const res = await this.chapter.find({pid: query.pid}).exec();
         return {code: 200, data: res, message: 'success'}
     }
+
+    @Get('getChapter')
+    async getChapter(@Query() query) {
+        const res = await this.chapter.findById(query.id).exec();
+        return {code: 200, data: res, message: 'success'}
+    }
 }
