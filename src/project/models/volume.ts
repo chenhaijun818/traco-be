@@ -6,6 +6,8 @@ export class Volume extends Document {
     @Prop()
     id: string;
     @Prop()
+    pid: string;
+    @Prop()
     name: string;
 }
 
