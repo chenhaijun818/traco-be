@@ -8,6 +8,7 @@ import {TrackModule} from './track/track.module';
 import {RoleModule} from './role/role.module';
 import {SiteModule} from './site/site.module';
 import {ThingModule} from './thing/thing.module';
+import {ChapterModule} from './chapter/chapter.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import {ThingModule} from './thing/thing.module';
     TrackModule,
     RoleModule,
     SiteModule,
-    ThingModule
+      ThingModule,
+      ChapterModule
   ],
   controllers: [ProjectController]
 })
