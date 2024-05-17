@@ -11,7 +11,8 @@ export class ThingController {
     @Post('add')
     async add(@Body() body) {
         const {name, pid} = body;
-        const res = await this.thing.create({name, pid});
+        const avatar = 'https://traco-oss.oss-cn-hangzhou.aliyuncs.com/app/thing.jpg';
+        const res = await this.thing.create({name, pid, avatar});
         return {code: 200, data: res, message: 'success'}
     }
 
