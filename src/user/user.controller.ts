@@ -90,6 +90,9 @@ export class UserController {
 
   @Get("getUser")
   async getUser(@Req() req) {
+    if (!req.user) {
+      return {}
+    }
     const res = await this.userModel.findById(req.user.id).exec();
     return {
       code: 200,
