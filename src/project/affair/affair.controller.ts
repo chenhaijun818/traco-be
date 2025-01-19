@@ -18,7 +18,8 @@ export class AffairController {
             tid: body.tid,
             sort: body.sort,
             roles: body.roles,
-            startTime: body.startTime
+            startTime: body.startTime,
+            progress: 1
         });
         return {
             code: 200,

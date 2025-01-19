@@ -47,9 +47,10 @@ export class Affair extends Document {
   // 序号
   @Prop()
   sort: number;
-  // 是否已完成
+
+  // 处理进度，  1：未处理；2：处理中；3：已处理
   @Prop()
-  done: boolean;
+  progress: number;
 }
 
 export const AffairSchema = SchemaFactory.createForClass(Affair);
