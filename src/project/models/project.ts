@@ -38,6 +38,10 @@ export class Project extends Document {
   // 该作品下的支线计数，累加不减
   @Prop()
   trackCount: number;
+
+  // 该作品是否可见
+  @Prop()
+  visible: boolean;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

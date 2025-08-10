@@ -16,7 +16,8 @@ export class ProjectController {
       user: req.user.id,
       cover,
       desc: "暂无简介",
-      trackCount: 1
+      trackCount: 1,
+      visible: true
     });
     return {
       code: 200,
@@ -54,7 +55,7 @@ export class ProjectController {
     const list = await this.project.find({ id: req.user.id }).exec();
     return {
       code: 200,
-      data: { list },
+      data: list,
       message: "success"
     };
   }
