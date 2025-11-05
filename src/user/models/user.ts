@@ -21,6 +21,8 @@ export class User extends Document {
   createdTime: Date;
   @Prop()
   status: number;
+  @Prop()
+  fc2: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
