@@ -9,6 +9,7 @@ import {RoleModule} from './role/role.module';
 import {SiteModule} from './site/site.module';
 import {ThingModule} from './thing/thing.module';
 import {ChapterModule} from './chapter/chapter.module';
+import { TagModule } from './tag/tag.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import {ChapterModule} from './chapter/chapter.module';
     RoleModule,
     SiteModule,
       ThingModule,
-      ChapterModule
+      ChapterModule,
+      TagModule
   ],
   controllers: [ProjectController]
 })

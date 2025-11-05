@@ -55,6 +55,9 @@ export class Role extends Document {
 
     @Prop()
     fertility: number;
+
+    @Prop()
+    tags: string[];
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);
